@@ -10,14 +10,14 @@ services:
     # depends_on:
     #   - app
     networks:
-      - frontend
+      - inception-net
   mariadb:
     build:
       context: ./mariadb
       dockerfile: Dockerfile
     container_name: mariadb
     networks:
-      - backend
+      - inception-net
     volumes:
       - mariadb:/var/lib/mysql
     restart: always
@@ -26,10 +26,20 @@ services:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: yoda
       MYSQL_PASSWORD: yoda
+  
+  wordpress:
+    build:
+      context: ./wordpress
+      dockerfile: Dockerfile
+    container_name: wordpress
+    networks:
+      - inception-net
+    volumes:
+      - ./wordpress:/var/www/html
+    restart: always
 
 networks:
-  frontend:
-  backend:
+  inception-net:
 
 volumes:
   mariadb:
