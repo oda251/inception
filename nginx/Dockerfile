@@ -34,6 +34,6 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
 RUN apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-EXPOSE 80 443
+EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]

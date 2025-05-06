@@ -58,6 +58,3 @@ services:
 
 networks:
   inception-net:
-
-volumes:
-  mariadb:
