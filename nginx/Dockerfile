@@ -12,14 +12,11 @@ RUN mkdir -p /etc/ssl/certs \
   && mkdir -p /etc/ssl/private \
   && mkdir -p /var/www/html
 
-RUN chown -R www-data:www-data /var/www/html && \
-	chmod -R 755 /var/www/html
-
 RUN openssl req -x509 -nodes -days 365 \
   -newkey rsa:2048 \
   -keyout /etc/ssl/private/inception.key \
   -out /etc/ssl/certs/inception.crt \
-  -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=yoda.42.fr"
+  -subj "/C=JA/ST=Tokyo/L=Shinjuku/O=42/CN=name"
 
 COPY ./nginx.conf /etc/nginx/conf.d
 

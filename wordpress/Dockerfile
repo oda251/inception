@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     mariadb-client
 
-RUN sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 9000/g' /etc/php/7.4/fpm/pool.d/www.conf && \
+RUN sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = wordpress:9000/g' /etc/php/7.4/fpm/pool.d/www.conf && \
     sed -i 's/;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 0.0.0.0/g' /etc/php/7.4/fpm/pool.d/www.conf && \
     sed -i 's/;catch_workers_output = yes/catch_workers_output = yes/g' /etc/php/7.4/fpm/pool.d/www.conf && \
     sed -i 's/;php_admin_flag\[log_errors\] = on/php_admin_flag[log_errors] = on/g' /etc/php/7.4/fpm/pool.d/www.conf && \
@@ -29,16 +29,11 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 
 WORKDIR /var/www/html
 
-RUN chown -R www-data:www-data /var/www/html
-
-RUN mkdir /run/php && \
+RUN mkdir -p /run/php && \
     mkdir -p /var/www/html && \
     chmod -R 777 /var/www/html
 
 COPY ./init.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
-ENTRYPOINT [ "sh", "/docker-entrypoint.sh" ]
-
 EXPOSE 9000
-
-CMD ["php-fpm7.4", "-F"]
+ENTRYPOINT [ "sh", "/docker-entrypoint.sh" ]

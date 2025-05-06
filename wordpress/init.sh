@@ -7,6 +7,8 @@ until mysqladmin ping -h"${WORDPRESS_DB_HOST}" -P3306 --silent; do
 done
 echo "MariaDB is up."
 
+cd /var/www/html
+
 if [ ! -f /var/www/html/wp-config.php ]; then
 
 	echo "WordPress is not installed. Proceeding with installation..."
@@ -44,4 +46,4 @@ else
 fi
 
 echo "Starting PHP-FPM..."
-exec "$@"
+exec php-fpm7.4 -F
