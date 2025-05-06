@@ -1,0 +1,4 @@
+.idea
+.vscode
+mariadb/data
+wordpress/data

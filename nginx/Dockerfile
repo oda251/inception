@@ -3,10 +3,10 @@ FROM debian:bullseye-slim
 RUN apt-get update \
   && apt-get upgrade -y \
   && apt-get install -y \
-    nginx \
-    openssl \
-    curl \
-    procps
+  nginx \
+  openssl \
+  curl \
+  procps
 
 RUN mkdir -p /etc/ssl/certs \
   && mkdir -p /etc/ssl/private \
@@ -21,10 +21,9 @@ RUN openssl req -x509 -nodes -days 365 \
 RUN chmod 600 /etc/ssl/private/inception.key \
   && chmod 644 /etc/ssl/certs/inception.crt
 
-RUN rm -f /etc/nginx/sites-available/default
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-
-RUN ln -sf /etc/nginx/conf.d/default.conf /etc/nginx/sites-enabled/default
+RUN rm -f /etc/nginx/conf.d/default.conf
+RUN rm -f /etc/nginx/sites-enabled/default
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log 

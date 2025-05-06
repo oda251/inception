@@ -1,20 +1,53 @@
 #!/bin/bash
 
-mkdir -p /download
-mkdir -p /var/www/html
-cd /var/www/html
+mkdir -p /run/php
 
-wget https://wordpress.org/latest.tar.gz -O /download/latest.tar.gz
-tar -xzvf /download/latest.tar.gz -C /var/www/html --strip-components=1
+sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 9000/g' /etc/php/7.4/fpm/pool.d/www.conf
+sed -i 's/;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 0.0.0.0/g' /etc/php/7.4/fpm/pool.d/www.conf
 
 mkdir -p /run/php
 
-sleep 5
+echo "Waiting for MariaDB connection at ${WORDPRESS_DB_HOST}..."
+until mysqladmin ping -h"${WORDPRESS_DB_HOST}" -P3306 --silent; do
+    echo "MariaDB is not available yet - sleeping for 2 seconds..."
+    sleep 2
+done
+echo "MariaDB is up."
 
-if [ ! -f /var/www/html/wp-config.php ]; then
-    cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
-    sed -i "s/database_name_here/$MYSQL_DATABASE/" /var/www/html/wp-config.php
-    sed -i "s/username_here/$MYSQL_USER/" /var/www/html/wp-config.php
-    sed -i "s/password_here/$MYSQL_PASSWORD/" /var/www/html/wp-config.php
-    sed -i "s/localhost/$MYSQL_HOST/" /var/www/html/wp-config.php
-fi
+# if [ ! -f /var/www/html/wp-config.php ]; then
+
+    echo "Downloading WordPress..."
+	wp core download --path=/var/www/html --locale=ja --allow-root
+
+    echo "Configuring WordPress..."
+	wp config create	--path=/var/www/html \
+						--allow-root \
+						--dbname=$WORDPRESS_DB_NAME \
+						--dbuser=$WORDPRESS_DB_USER \
+						--dbpass=$WORDPRESS_DB_PASSWORD \
+						--dbhost=$WORDPRESS_DB_HOST
+
+    echo "Installing WordPress..."
+	wp core install		--allow-root \
+						--url=$WORDPRESS_URL \
+						--title=$WORDPRESS_TITLE \
+						--admin_user=$WORDPRESS_ADMIN \
+						--admin_password=$WORDPRESS_ADMIN_PASSWORD \
+						--admin_email=$WORDPRESS_ADMIN_EMAIL \
+						--skip-email \
+						--path=/var/www/html/
+
+    echo "Creating WordPress user..."
+	wp user create		--allow-root \
+						$WORDPRESS_USER \
+						$WORDPRESS_USER_EMAIL \
+						--user_pass=$WORDPRESS_USER_PASSWORD \
+						--role=author \
+						--path=/var/www/html/
+# fi
+
+chown -R www-data:www-data /var/www/html
+chmod -R 755 /var/www/html
+
+echo "Starting PHP-FPM..."
+exec "$@"

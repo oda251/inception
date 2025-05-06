@@ -5,12 +5,13 @@ services:
       dockerfile: Dockerfile
     container_name: nginx
     ports:
-      - "8443:443"
+      - "${NGINX_PORT}:443"
     restart: always
-    # depends_on:
-    #   - app
+    depends_on:
+      - wordpress
     networks:
       - inception-net
+
   mariadb:
     build:
       context: ./mariadb
@@ -19,13 +20,13 @@ services:
     networks:
       - inception-net
     volumes:
-      - mariadb:/var/lib/mysql
+      - ./mariadb/data:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: yoda
-      MYSQL_PASSWORD: yoda
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_USER_PASSWORD: ${MYSQL_USER_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
   
   wordpress:
     build:
@@ -35,8 +36,25 @@ services:
     networks:
       - inception-net
     volumes:
-      - ./wordpress:/var/www/html
+      - ./wordpress/data:/var/www/html
     restart: always
+    environment:
+      WORDPRESS_DB_HOST: ${MYSQL_HOST}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_USER_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_URL: ${WORDPRESS_URL}
+      WORDPRESS_TITLE: ${WORDPRESS_TITLE}
+      WORDPRESS_ADMIN: ${WORDPRESS_ADMIN}
+      WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
+      WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
+      WORDPRESS_USER: ${WORDPRESS_USER}
+      WORDPRESS_USER_EMAIL: ${WORDPRESS_USER_EMAIL}
+      WORDPRESS_USER_PASSWORD: ${WORDPRESS_USER_PASSWORD}
+    depends_on:
+      - mariadb
+    ports:
+      - 9000:9000
 
 networks:
   inception-net:
