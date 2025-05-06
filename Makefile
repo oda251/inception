@@ -1,6 +1,8 @@
-run:
-	docker-compose up --build
+up:
+	docker-compose up 
 
+up-b:
+	docker-compose up --build
 
 stop:
 	docker-compose down
@@ -11,6 +13,8 @@ build:
 clean:
 	rm -rf mariadb/data wordpress/data
 
-re: clean run
+buildup: build up
 
-.PHONY: run stop build clean
+re: clean upbuild
+
+.PHONY: up up-b stop build clean buildup re

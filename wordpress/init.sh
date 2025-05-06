@@ -9,7 +9,6 @@ echo "MariaDB is up."
 
 if [ ! -f /var/www/html/wp-config.php ]; then
 
-	cd /var/www/html
 	echo "WordPress is not installed. Proceeding with installation..."
 	echo "Downloading WordPress..."
 	wp core download --path=/var/www/html --locale=ja --allow-root
