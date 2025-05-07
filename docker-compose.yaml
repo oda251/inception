@@ -11,6 +11,8 @@ services:
       - wordpress
     networks:
       - inception-net
+    volumes:
+      - ./wordpress/data:/var/www/html
 
   mariadb:
     build:
