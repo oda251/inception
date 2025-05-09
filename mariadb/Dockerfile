@@ -9,7 +9,6 @@ RUN mkdir -p /var/run/mysqld \
     && chmod 777 /var/run/mysqld \
     && chmod 777 -R /var/lib/mysql
 
-
 COPY ./mariadb.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 COPY ./init.sh /docker-entrypoint.sh
 

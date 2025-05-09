@@ -18,7 +18,7 @@ RUN openssl req -x509 -nodes -days 365 \
   -out /etc/ssl/certs/inception.crt \
   -subj "/C=JA/ST=Tokyo/L=Shinjuku/O=42/CN=name"
 
-COPY ./nginx.conf /etc/nginx/sites-available/default
+COPY ./default.conf /etc/nginx/sites-available/default
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log 
