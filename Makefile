@@ -16,7 +16,8 @@ build:
 
 clean:
 	cd srcs && \
-	rm -rf /home/yoda/data/*
+	rm -rf /home/yoda/data/* &&
+	docker container prune -f
 
 buildup: build up
 

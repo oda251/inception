@@ -47,5 +47,7 @@ else
 	echo "WordPress is already installed."
 fi
 
+chown -R www-data:www-data /var/www/html
+
 echo "Starting PHP-FPM..."
 php-fpm7.4 -F
