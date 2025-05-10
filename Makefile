@@ -16,7 +16,7 @@ build:
 
 clean:
 	cd srcs && \
-	rm -rf mariadb/data wordpress/data
+	rm -rf /home/yoda/data/*
 
 buildup: build up
 
