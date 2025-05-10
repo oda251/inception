@@ -1,6 +1,6 @@
 up:
 	cd srcs && \
-	docker-compose up 
+	docker-compose up
 
 up-b:
 	cd srcs && \
