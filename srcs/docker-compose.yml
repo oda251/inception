@@ -3,8 +3,6 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    tags:
-      - nginx
     container_name: nginx
     ports:
       - "${NGINX_PORT}:443"
