@@ -3,11 +3,6 @@
 sleep 10
 
 echo "Waiting for MariaDB connection at ${WORDPRESS_DB_HOST}..."
-until mysqladmin ping -h"${WORDPRESS_DB_HOST}" -P3306 --silent; do
-    echo "MariaDB is not available yet - sleeping for 2 seconds..."
-    sleep 2
-done
-echo "MariaDB is up."
 
 cd /var/www/html
 
