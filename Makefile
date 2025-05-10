@@ -1,9 +1,5 @@
 up:
 	cd srcs && \
-	docker-compose up
-
-up-b:
-	cd srcs && \
 	docker-compose up --build
 
 down:
