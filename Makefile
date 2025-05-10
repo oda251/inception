@@ -1,4 +1,7 @@
 up:
+	mkdir -p /home/yoda/data && \
+	mkdir -p /home/yoda/data/wp && \
+	mkdir -p /home/yoda/data/db && \
 	cd srcs && \
 	docker-compose up --build
 
