@@ -1,4 +1,4 @@
 .idea
 .vscode
-mariadb/data
-wordpress/data
+srcs/mariadb/data
+srcs/wordpress/data
