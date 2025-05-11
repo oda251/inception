@@ -4,6 +4,7 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     container_name: nginx
+    image: nginx
     ports:
       - "${NGINX_PORT}:443"
     restart: always
@@ -18,7 +19,7 @@ services:
     build:
       context: ./mariadb
       dockerfile: Dockerfile
-    image: mariadbwp
+    image: mariadb
     container_name: mariadb
     networks:
       - inception-net
